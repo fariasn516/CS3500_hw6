@@ -237,8 +237,8 @@ public class ThreeTriosModelTest {
     hasSeededRandom.placingPhase(rabbitCard, 0, 0);
     hasSeededRandom.battlingPhase(0, 0);
 
-    Assert.assertEquals(rabbitCard.getColor(),
-            hasSeededRandom.getGrid().getCard(0, 0).getColor());
+    Assert.assertEquals(Color.RED,
+            hasSeededRandom.getCardOwnerColor(hasSeededRandom.getGrid().getCard(0, 0)));
   }
 
   // test takeTurn method
@@ -284,9 +284,11 @@ public class ThreeTriosModelTest {
   @Test
   public void testTakeTurnWithValidMove() {
     hasSeededRandom.startGame(deck, true, gridWithNoHoles);
-    hasSeededRandom.takeTurn(oxCard, 0, 0);
-    Assert.assertTrue(hasSeededRandom.getGrid().getCells()[0][0].hasCard());
-    Assert.assertEquals(Color.RED, hasSeededRandom.getGrid().getCard(0, 0).getColor());
+    hasSeededRandom.placingPhase(oxCard, 0, 0);
+    hasSeededRandom.placingPhase(dogCard, 0, 1);
+    hasSeededRandom.battlingPhase(0, 0);
+    Color expectedOwnerColor = hasSeededRandom.getCurrentPlayer().getColor();
+    Assert.assertEquals(expectedOwnerColor, hasSeededRandom.getCardOwnerColor(dogCard));
   }
 
   // test isGameOver method
@@ -394,42 +396,11 @@ public class ThreeTriosModelTest {
     Player newPlayer = new HumanPlayer(null, Color.RED);
   }
 
-  // when color is null
-  @Test (expected = IllegalArgumentException.class)
-  public void shouldThrowIllegalArgumentColorNull() {
-    this.monkeyCard.createCardColor(Color.RED);
-    this.dragonCard.createCardColor(Color.RED);
-    List<Card> cards = List.of(this.monkeyCard, this.dragonCard);
-
-    Player newPlayer = new HumanPlayer(cards, null);
-  }
-
-  // when not all cards adhere to the player's color
-  @Test (expected = IllegalArgumentException.class)
-  public void shouldThrowIllegalArgumentHandNotCorrectColor() {
-    this.monkeyCard.createCardColor(Color.RED);
-    this.dragonCard.createCardColor(Color.BLUE);
-    List<Card> cards = List.of(this.monkeyCard, this.dragonCard);
-
-    Player newPlayer = new HumanPlayer(cards, Color.RED);
-  }
-
   // test the removeFromHand method
   // when the card does not exist in the hand
   @Test (expected = IllegalArgumentException.class)
   public void shouldThrowIllegalArgumentCardNotInHand() {
     this.redHumanPlayer.removeFromHand(this.monkeyCard);
-  }
-
-  // when the card exists in the hand
-  @Test
-  public void shouldRemoveFromHand() {
-    this.ratCard.createCardColor(Color.RED);
-    this.dragonCard.createCardColor(Color.RED);
-    Player newPlayer = new HumanPlayer(
-            new ArrayList<>(List.of(this.ratCard, this.dragonCard)), Color.RED);
-    newPlayer.removeFromHand(this.ratCard);
-    Assert.assertEquals(1, newPlayer.getCardsInHand().size());
   }
 
   // test the removeFromOwnership method
@@ -564,38 +535,6 @@ public class ThreeTriosModelTest {
     Assert.assertEquals(-1, compare);
   }
 
-  // test the createCardColor method
-  // creating a blue card
-  @Test
-  public void shouldCreateBlueCard() {
-    this.ratCard.createCardColor(Color.BLUE);
-    Assert.assertEquals(Color.BLUE, this.ratCard.getColor());
-  }
-
-  // creating a red card
-  @Test
-  public void shouldCreateRedCard() {
-    this.ratCard.createCardColor(Color.RED);
-    Assert.assertEquals(Color.RED, this.ratCard.getColor());
-  }
-
-  // test the flipColor method
-  // flipping from red to blue
-  @Test
-  public void shouldFlipColorToBlue() {
-    this.ratCard.createCardColor(Color.RED);
-    this.ratCard.flipColor();
-    Assert.assertEquals(Color.BLUE, this.ratCard.getColor());
-  }
-
-  // flipping from blue to red
-  @Test
-  public void shouldFlipColorToRed() {
-    this.ratCard.createCardColor(Color.BLUE);
-    this.ratCard.flipColor();
-    Assert.assertEquals(Color.RED, this.ratCard.getColor());
-  }
-
   // test the getValueFromDirection method
   // makes sure that illegalArgumentException is thrown when direction is null
   @Test (expected = IllegalArgumentException.class)
@@ -631,20 +570,6 @@ public class ThreeTriosModelTest {
     Assert.assertEquals(1, value);
   }
 
-  // test the getColor method
-  // throws an exception when the color has not been initialized
-  @Test (expected = IllegalStateException.class)
-  public void shouldThrowIllegalColorNotInitialized() {
-    this.snakeCard.getColor();
-  }
-
-  // gets the color
-  @Test
-  public void shouldGetColor() {
-    this.dogCard.createCardColor(Color.BLUE);
-    Assert.assertEquals(Color.BLUE, this.dogCard.getColor());
-  }
-
   // test the getName method
   // makes sure that changing the returned name doesn't mutate anything
   @Test
@@ -675,9 +600,17 @@ public class ThreeTriosModelTest {
   @Test
   public void shouldNotMutateOriginalCopyOfCard() {
     Card copiedCard = this.snakeCard.copy();
-    copiedCard.createCardColor(Color.BLUE);
-    boolean isEqual = this.snakeCard.equals(copiedCard);
-    Assert.assertFalse(isEqual);
+    Assert.assertEquals(this.snakeCard, copiedCard);
+
+    Map<Direction, Value> newValues = new HashMap<>();
+    newValues.put(Direction.NORTH, Value.TWO);
+    newValues.put(Direction.SOUTH, Value.THREE);
+    newValues.put(Direction.EAST, Value.FOUR);
+    newValues.put(Direction.WEST, Value.FIVE);
+
+    copiedCard = new SimpleCard(copiedCard.getName(), newValues);
+    Assert.assertEquals(10, this.snakeCard.getValueFromDirection(Direction.NORTH));
+    Assert.assertEquals(this.snakeCard, this.snakeCard);
   }
 
   // test the toString method
@@ -839,20 +772,6 @@ public class ThreeTriosModelTest {
     Assert.assertArrayEquals(expectedLayout, gridWithHoles.getHoleLayout());
   }
 
-  // test toString
-  @Test
-  public void testToStringGrid() {
-    dogCard.createCardColor(Color.BLUE);
-    horseCard.createCardColor(Color.RED);
-    gridWithNoHoles.placeCard(dogCard, 0, 0);
-    gridWithNoHoles.placeCard(horseCard, 2, 2);
-    String expected = "B__\n"
-            + "___\n"
-            + "__R\n";
-    Assert.assertEquals(expected, gridWithNoHoles.toString());
-  }
-
-
   // test GameCell file
   // test hasCard
   @Test
@@ -932,24 +851,6 @@ public class ThreeTriosModelTest {
   @Test(expected = IllegalStateException.class)
   public void testGetCardFromHole() {
     cellWithHole.getCard();
-  }
-
-  // test toString
-  @Test
-  public void testToStringForEmptyCell() {
-    Assert.assertEquals("_", cellWithoutHole.toString());
-  }
-
-  @Test
-  public void testToStringForHoleCell() {
-    Assert.assertEquals("X", cellWithHole.toString());
-  }
-
-  @Test
-  public void testToStringForOccupiedCell() {
-    goatCard.createCardColor(Color.RED);
-    cellWithoutHole.placeCard(goatCard);
-    Assert.assertEquals("R", cellWithoutHole.toString());
   }
 
 

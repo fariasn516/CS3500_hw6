@@ -61,7 +61,9 @@ public class ThreeTriosTextViewTest {
     model.takeTurn(cardToPlace, 0, 0);
 
     String expectedView = "Player: BLUE\n" +
-            "Grid:\n" + model.getGrid().toString() +
+            "Grid:\n" +
+            " R\n" +
+            "__\n" +
             "Hand:\n" +
             "ox 2 4 4 4 \n" +
             "tiger 3 4 5 6 \n";
@@ -123,7 +125,9 @@ public class ThreeTriosTextViewTest {
     model.takeTurn(cardToPlace2, 1, 1);
 
     String expectedView = "Player: RED\n" +
-            "Grid:\n" + model.getGrid().toString() +
+            "Grid:\n" +
+            "R \n" +
+            "BR\n" +
             "Hand:\n";
     assertEquals(expectedView, view.toString());
   }

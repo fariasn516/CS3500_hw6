@@ -162,28 +162,6 @@ public class GameGrid implements Grid {
   }
 
   @Override
-  public String toString() {
-    StringBuilder stringRep = new StringBuilder();
-    for (int row = 0; row < numRows; row++) {
-      for (int col = 0; col < numCols; col++) {
-        Cell cell = grid[row][col];
-        if (cell.isHole()) {
-          stringRep.append(" ");
-        }
-        else if (cell.hasCard()) {
-          Card card = cell.getCard();
-          stringRep.append(card.getColor() == Color.RED ? "R" : "B");
-        }
-        else {
-          stringRep.append("_");
-        }
-      }
-      stringRep.append("\n");
-    }
-    return stringRep.toString();
-  }
-
-  @Override
   public boolean equals(Object obj) {
     if (this == obj) {
       return true;

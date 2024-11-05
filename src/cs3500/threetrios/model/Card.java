@@ -19,13 +19,13 @@ public interface Card {
   /**
    * Flips the color of this card in order to change its ownership.
    */
-  void flipColor();
+  // void flipColor();
 
   /**
    * Makes this card's color the given color.
    * @param color represents the color the card is going to be
    */
-  void createCardColor(Color color);
+  // void createCardColor(Color color);
 
   // Below are OBSERVATIONS
   /**
@@ -39,7 +39,7 @@ public interface Card {
    * Returns the color of this card.
    * @return the color of this card
    */
-  Color getColor();
+  // Color getColor();
 
   /**
    * Finds and returns the name of this card.

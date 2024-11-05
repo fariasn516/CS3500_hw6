@@ -24,25 +24,8 @@ public class HumanPlayer implements Player {
       throw new IllegalArgumentException("Color cannot be null");
     }
     this.color = color;
-    if (!checkCorrectColor(cardsInHand)) {
-      throw new IllegalArgumentException("Some cards are not the correct color");
-    }
     this.cardsInHand = cardsInHand;
     this.ownedCardsOnGrid = new ArrayList<>();
-  }
-
-  /**
-   * Makes sure that all the cards given are the correct color.
-   * @param cards represents the cards in hand
-   * @return whether the cards are all the correct color
-   */
-  private boolean checkCorrectColor(List<Card> cards) {
-    for (Card card : cards) {
-      if (card.getColor() != this.color) {
-        return false;
-      }
-    }
-    return true;
   }
 
   @Override
@@ -91,4 +74,5 @@ public class HumanPlayer implements Player {
   public String toString() {
     return "Player: " + color;
   }
+
 }

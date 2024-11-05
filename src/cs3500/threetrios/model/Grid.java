@@ -81,14 +81,6 @@ public interface Grid {
    * @return a 2D boolean array where `true` indicates a hole and `false` indicates a card cell.
    */
   boolean[][] getHoleLayout();
-  
-  /**
-   * Converts the grid into a string representation.
-   *
-   * @return a string representation of the grid
-   */
-  String toString();
-
 
 }
 

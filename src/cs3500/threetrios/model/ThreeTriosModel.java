@@ -102,28 +102,21 @@ public class ThreeTriosModel implements Model {
     List<Card> redHand = new ArrayList<>();
     List<Card> blueHand = new ArrayList<>();
     for (int allCards = 0; allCards < cards.size(); allCards++) {
+      // deal the cards without associating color with the card itself
       if (allCards % 2 == 0) {
-        cards.get(allCards).createCardColor(Color.RED);
         redHand.add(cards.get(allCards));
       } else {
-        cards.get(allCards).createCardColor(Color.BLUE);
         blueHand.add(cards.get(allCards));
       }
     }
 
     this.redPlayer = new HumanPlayer(redHand, Color.RED);
     this.bluePlayer = new HumanPlayer(blueHand, Color.BLUE);
-
   }
 
   @Override
   public void placingPhase(Card card, int row, int col) {
-    if (!started) {
-      throw new IllegalStateException("Game not started!");
-    }
-    if (gameEnded) {
-      throw new IllegalStateException("Game already ended!");
-    }
+    checkGameState();
     currentPlayer.removeFromHand(card);
     currentPlayer.addToOwnership(card);
     grid.placeCard(card, row, col);
@@ -131,39 +124,29 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public void battlingPhase(int row, int col) {
-    if (!started) {
-      throw new IllegalStateException("Game not started!");
-    }
-    if (gameEnded) {
-      throw new IllegalStateException("Game already ended!");
-    }
+    checkGameState();
+
     Card placedCard = grid.getCard(row, col);
     Map<String, Direction> adjacentCards = grid.getAdjacentCardsWithDirections(row, col);
 
-    for (Map.Entry<String, Direction> card : adjacentCards.entrySet()) {
-      String adjCardName = card.getKey();
-      // direction of adjacent card relative to placed card
-      Direction direction = card.getValue();
-      // direction of adjacent card whose value will be used for battle
+    for (Map.Entry<String, Direction> entry : adjacentCards.entrySet()) {
+      Card adjCard = findCardByName(entry.getKey());
+      Direction direction = entry.getValue();
       Direction oppositeDirection = getOppositeDirection(direction);
 
-      Card adjCard = findCardByName(adjCardName);
-
-      if (adjCard.getColor() != placedCard.getColor()) {
-        if (placedCard.getValueFromDirection(direction)
-                > adjCard.getValueFromDirection(oppositeDirection)) {
-          adjCard.flipColor();
-          currentPlayer.addToOwnership(adjCard);
+      Color ownerColor = getCardOwnerColor(adjCard);
+      if (ownerColor != null && ownerColor != currentPlayer.getColor()) {
+        if (placedCard.getValueFromDirection(direction) > adjCard.getValueFromDirection(oppositeDirection)) {
           if (currentPlayer.getColor() == Color.BLUE) {
+            bluePlayer.addToOwnership(adjCard);
             redPlayer.removeFromOwnership(adjCard);
-          }
-          else {
+          } else {
+            redPlayer.addToOwnership(adjCard);
             bluePlayer.removeFromOwnership(adjCard);
           }
         }
       }
     }
-
   }
 
   /**
@@ -212,12 +195,7 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public void takeTurn(Card card, int row, int col) {
-    if (!started) {
-      throw new IllegalStateException("Game has not started yet!");
-    }
-    if (gameEnded) {
-      throw new IllegalStateException("Game has already ended.");
-    }
+    checkGameState();
     if (!currentPlayer.getCardsInHand().contains(card)) {
       throw new IllegalArgumentException("Card does not belong to current player.");
     }
@@ -236,7 +214,6 @@ public class ThreeTriosModel implements Model {
     if (!started) {
       throw new IllegalStateException("Game not started!");
     }
-
     gameEnded = allCardCellsFilled();
     return gameEnded;
   }
@@ -290,5 +267,25 @@ public class ThreeTriosModel implements Model {
   @Override
   public boolean hasStarted() {
     return started;
+  }
+
+  @Override
+  public Color getCardOwnerColor(Card card) {
+    if (redPlayer.getOwnedCardsOnGrid().contains(card)) {
+      return Color.RED;
+    } else if (bluePlayer.getOwnedCardsOnGrid().contains(card)) {
+      return Color.BLUE;
+    } else {
+      return null;
+    }
+  }
+
+  private void checkGameState() {
+    if (!started) {
+      throw new IllegalStateException("Game not started!");
+    }
+    if (gameEnded) {
+      throw new IllegalStateException("Game already ended!");
+    }
   }
 }

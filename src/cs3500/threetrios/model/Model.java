@@ -88,4 +88,9 @@ public interface Model {
    */
   boolean hasStarted();
 
-}
+  /**
+   * Returns a specific cards owner's color
+   * @return owners color
+   */
+  Color getCardOwnerColor(Card card);
+  }

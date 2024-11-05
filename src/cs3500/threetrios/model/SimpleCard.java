@@ -2,13 +2,13 @@ package cs3500.threetrios.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Class that represents the card that is used in the game Three Trios.
  */
 public class SimpleCard implements Card {
   private final String name; // represents the unique name of this card
-  private Color color; // represents the color of this card
   private final Map<Direction, Value> cardValues; // represents the values of this card
 
   /**
@@ -26,29 +26,6 @@ public class SimpleCard implements Card {
       throw new IllegalArgumentException("All directions must be accounted for");
     }
     this.name = name;
-    this.cardValues = cardValues;
-  }
-
-  /**
-   * Another constructor for SimpleCard that takes in the name of the card, its color,
-   * and a map of its directions and values.
-   * @param name represents the name of this card
-   * @param color represents the color of this card
-   * @param cardValues represents the values this card has
-   */
-  public SimpleCard(String name, Color color, Map<Direction, Value> cardValues) {
-    if (cardValues == null) {
-      throw new IllegalArgumentException("Values cannot be null");
-    }
-    if (name == null) {
-      throw new IllegalArgumentException("Name cannot be null");
-    }
-    if (!validValues(cardValues)) {
-      throw new IllegalArgumentException("All directions must be accounted for");
-    }
-
-    this.name = name;
-    this.color = color;
     this.cardValues = cardValues;
   }
 
@@ -123,34 +100,11 @@ public class SimpleCard implements Card {
   }
 
   @Override
-  public void createCardColor(Color color) {
-    this.color = color;
-  }
-
-  @Override
-  public void flipColor() {
-    if (this.color == Color.RED) {
-      this.color = Color.BLUE;
-    }
-    else if (this.color == Color.BLUE) {
-      this.color = Color.RED;
-    }
-  }
-
-  @Override
   public int getValueFromDirection(Direction direction) {
     if (direction == null) {
       throw new IllegalArgumentException("Direction cannot be null");
     }
     return cardValues.get(direction).getValue();
-  }
-
-  @Override
-  public Color getColor() {
-    if (color == null) {
-      throw new IllegalStateException("Color has not been assigned yet!");
-    }
-    return color;
   }
 
   @Override
@@ -160,12 +114,12 @@ public class SimpleCard implements Card {
 
   @Override
   public Card copy() {
-    return new SimpleCard(this.name, this.color, this.cardValues);
+    return new SimpleCard(this.name, this.cardValues);
   }
 
   @Override
   public int hashCode() {
-    return this.color.hashCode();
+    return Objects.hash(name, cardValues);
   }
 
   @Override
@@ -174,9 +128,6 @@ public class SimpleCard implements Card {
       return false;
     }
     if (!this.name.equals(((SimpleCard) obj).name)) {
-      return false;
-    }
-    if (this.color != ((SimpleCard) obj).color) {
       return false;
     }
     for (Direction direction : Direction.values()) {

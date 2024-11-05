@@ -44,14 +44,5 @@ public interface Cell {
    * @throws IllegalStateException if the cell is a hole or there is no card in this cell.
    */
   Card getCard();
-
-  /**
-   * Converts the cell into a string representation.
-   * For holes, it returns "X". For empty cells, it returns "_". For cells with cards,
-   * it returns the first letter of the card's owner (R for Red, B for Blue).
-   *
-   * @return a string representation of the cell.
-   */
-  String toString();
 }
 

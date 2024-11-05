@@ -1,8 +1,11 @@
 package cs3500.threetrios.view;
 
+import cs3500.threetrios.model.Cell;
+import cs3500.threetrios.model.Color;
 import cs3500.threetrios.model.ThreeTriosModel;
 import cs3500.threetrios.model.Card;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -76,7 +79,22 @@ public class ThreeTriosGameTextView implements ThreeTriosGameView {
    */
   private String renderGrid() {
     StringBuilder gridState = new StringBuilder("Grid:\n");
-    gridState.append(model.getGrid().toString());
+    Cell[][] cells = model.getGrid().getCells();
+    for (int row = 0; row < model.getGrid().getNumRows(); row++) {
+      for (int col = 0; col < model.getGrid().getNumCols(); col++) {
+        Cell cell = cells[row][col];
+        if (cell.isHole()) {
+          gridState.append(" ");
+        } else if (!cell.hasCard()) {
+          gridState.append("_");
+        } else {
+          Card card = cell.getCard();
+          Color cardOwnerColor = this.model.getCardOwnerColor(card);
+          gridState.append(cardOwnerColor.toString().substring(0, 1));
+        }
+      }
+      gridState.append("\n");
+    }
     return gridState.toString();
   }
 

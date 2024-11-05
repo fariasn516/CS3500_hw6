@@ -9,6 +9,7 @@ public class GameCell implements Cell {
 
   /**
    * Constructor for GameCell, takes in a boolean that represents whether it is a hole.
+   *
    * @param isHole represents whether the cell is a hole
    */
   public GameCell(boolean isHole) {
@@ -63,7 +64,7 @@ public class GameCell implements Cell {
    * @return true if the cell is a hole, false otherwise.
    */
   @Override
-  public  boolean isHole() {
+  public boolean isHole() {
     return isHole;
   }
 
@@ -83,26 +84,6 @@ public class GameCell implements Cell {
       throw new IllegalStateException("No card in this cell.");
     }
     return card;
-  }
-
-  /**
-   * Converts the cell into a string representation.
-   * For holes, it returns "X". For empty cells, it returns "_". For cells with cards,
-   * it returns the first letter of the card's owner (R for Red, B for Blue).
-   *
-   * @return a string representation of the cell.
-   */
-  @Override
-  public String toString() {
-    if (isHole) {
-      return "X";
-    }
-    else if (card == null) {
-      return "_";
-    }
-    else {
-      return card.getColor().toString().substring(0, 1);
-    }
   }
 }
 

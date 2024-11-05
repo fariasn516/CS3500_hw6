@@ -1,0 +1,78 @@
+Three Trios Game
+
+Overview:
+Three Trios is a two-player strategy game inspired by Triple Triad. In Three Trios, players take
+turns placing custom cards onto a grid of cells. The goal is to own the most cards on the board by
+the end of the game, achieved through strategic placements and battles. Each player has a
+designated color (blue or red) and a unique hand of cards.
+
+When a card is placed next to an opponent’s card, a "battle" begins which compares the adjacent
+values. The card with the higher value flips the opponent’s card to its color. The game ends when
+all playable cells are filled, with the player owning the most cards declared the winner.
+
+Assumptions:
+A grid layout containing card cells (for placements) and holes (unplayable cells).
+An odd number of playable cells and an even number of cards dealt to ensure a balanced start.
+
+Quick Start:
+To get started with the Three Trios codebase, here’s a basic example of how to initialize and play
+a turn:
+
+public class ThreeTriosQuickStartTest {
+    @Test
+    public void testGameStartAndFirstTurn() {
+        // Sample deck
+        List<Card> deck = List.of(
+                new SimpleCard("rat", Value.ACE, Value.ONE, Value.TWO, Value.THREE),
+                new SimpleCard("ox", Value.TWO, Value.FOUR, Value.FOUR, Value.FOUR)
+        );
+
+        // Create a game grid, specifying holes (unplayable cells)
+        GameGrid grid = new GameGrid(3, 3, new boolean[][] {
+                {false, true},
+                {true, true}
+        });
+
+        // Initialize the model
+        ThreeTriosModel model = new ThreeTriosModel();
+
+        // Start the game
+        model.startGame(deck, true, grid);
+
+        // Take a turn by placing a card in the current player's hand
+        Card cardToPlace = model.getCurrentPlayer().getCardsInHand().get(0);
+        model.takeTurn(cardToPlace, 0, 0);
+
+        // Initialize a TextView to see outcome
+        ThreeTriosGameTextView view = new ThreeTriosGameTextView(model);
+    }
+}
+
+Key Components:
+Card Interface: Defines core card attributes and actions, such as flipping colors.
+    SimpleCard: Implements the Card interface, representing cards with a name, color, and
+    directional values.
+
+Player Interface: Manages player-specific details like color, cards in hand, and moves.
+    HumanPlayer: Implements Player, tracking the player's hand, cards on the grid, and color, with
+    methods for managing and transferring card ownership.
+
+Cell Interface: Represents individual squares on the board, which may hold a card or be a hole.
+    GameCell: Implements Cell, distinguishing between card cells and holes, with methods for card
+    placement and retrieval.
+
+Grid Interface: Defines the game board structure, tracking cells and card placements.
+    GameGrid: Implements Grid, storing the board’s layout, including cells and holes, and managing
+    card locations during play.
+
+Source Organization:
+cs3500.threetrios.model:
+    ThreeTriosModel - Core gameplay model, handling all primary game mechanics.
+    SimpleCard - Represents cards used in the game, with defined directions and values.
+    Player - Interface for players in the game; HumanPlayer manages player-specific actions.
+    GameGrid - The game board, a grid containing cells for card placements and holes.
+    GameCell - A cell on the game board, tracking whether it’s a card cell or hole.
+
+cs3500.threetrios.view:
+    ThreeTriosGameTextView - A text-based rendering of the current game state, useful for debugging
+    or console-based gameplay.

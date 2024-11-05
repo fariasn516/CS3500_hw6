@@ -957,7 +957,7 @@ public class ThreeTriosModelTest {
   // test the createDeck method
   @Test
   public void createLessDeck() throws FileNotFoundException {
-    String path = "CS3500_HW5/configurationFiles/CardConfiguration/LessCards";
+    String path = "configurationFiles/CardConfiguration/LessCards";
     CardFileParser parser = new CardFileParser(path);
     List<Card> result = parser.createDeck();
 
@@ -983,7 +983,7 @@ public class ThreeTriosModelTest {
   // testing createGridFromFile from Disconnected file
   @Test
   public void testDisconnectedFile() throws FileNotFoundException {
-    File file = new File("CS3500_HW5/configurationFiles/GridConfiguration/Disconnected");
+    File file = new File("configurationFiles/GridConfiguration/Disconnected");
     GridFileParser parser = new GridFileParser(file);
     GameGrid result = parser.createGridFromFile();
 
@@ -1003,7 +1003,7 @@ public class ThreeTriosModelTest {
   // testing createGridFromFile from HasHoles file
   @Test
   public void testHasHolesFile() throws FileNotFoundException {
-    File file = new File("CS3500_HW5/configurationFiles/GridConfiguration/HasHoles");
+    File file = new File("configurationFiles/GridConfiguration/HasHoles");
     GridFileParser parser = new GridFileParser(file);
     GameGrid result = parser.createGridFromFile();
 
@@ -1023,7 +1023,7 @@ public class ThreeTriosModelTest {
   // testing createGridFromFile from NoHoles file
   @Test
   public void testNoHolesFile() throws FileNotFoundException {
-    File file = new File("CS3500_HW5/configurationFiles/GridConfiguration/NoHoles");
+    File file = new File("configurationFiles/GridConfiguration/NoHoles");
     GridFileParser parser = new GridFileParser(file);
     GameGrid result = parser.createGridFromFile();
 

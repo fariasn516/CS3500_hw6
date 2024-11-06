@@ -166,6 +166,7 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
     }
   }
 
+
   /**
    *
    */

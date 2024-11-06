@@ -3,7 +3,7 @@ package cs3500.threetrios.model;
 /**
  * The read-only interface for our game model, contains all the observation methods.
  */
-public interface ReadonlyModel {
+public interface ReadOnlyModel {
 
   /**
    * Returns the current state of the grid.

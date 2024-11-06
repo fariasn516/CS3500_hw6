@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * The model interface for our game model, contains all the mutator methods.
  */
-public interface Model extends ReadonlyModel {
+public interface Model extends ReadOnlyModel {
 
   /**
    * Initializes the game with the given deck of cards, shuffle option, and grid configuration.

@@ -36,10 +36,11 @@ public interface Card {
   int getValueFromDirection(Direction direction);
 
   /**
-   * Returns the color of this card.
-   * @return the color of this card
+   * Returns the Value at the given Direction
+   * @param direction represents the direction that you want the value from
+   * @return the Value in String form from the given Direction
    */
-  // Color getColor();
+  String getValueGivenDirection(Direction direction);
 
   /**
    * Finds and returns the name of this card.

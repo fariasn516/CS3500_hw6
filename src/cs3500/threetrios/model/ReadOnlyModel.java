@@ -1,5 +1,7 @@
 package cs3500.threetrios.model;
 
+import java.util.List;
+
 /**
  * The read-only interface for our game model, contains all the observation methods.
  */
@@ -42,4 +44,16 @@ public interface ReadOnlyModel {
    * @throws IllegalStateException if the game has not started or is not yet over.
    */
   String winner();
+
+  /**
+   * Returns the list of cards in the blue player's hand.
+   * @return the list of cards in the blue player's hand
+   */
+  List<Card> getBluePlayer();
+
+  /**
+   * Returns the list of cards in the red player's hand.
+   * @return the list of cards in the red player's hand
+   */
+  List<Card> getRedPlayer();
 }

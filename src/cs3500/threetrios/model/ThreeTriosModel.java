@@ -288,4 +288,20 @@ public class ThreeTriosModel implements Model {
       throw new IllegalStateException("Game already ended!");
     }
   }
+
+  @Override
+  public List<Card> getBluePlayer() {
+    if (!this.started) {
+      throw new IllegalStateException("Game not started!");
+    }
+    return new ArrayList<>(this.bluePlayer.getCardsInHand());
+  }
+
+  @Override
+  public List<Card> getRedPlayer() {
+    if (!this.started) {
+      throw new IllegalStateException("Game not started!");
+    }
+    return new ArrayList<>(this.redPlayer.getCardsInHand());
+  }
 }

@@ -108,6 +108,14 @@ public class SimpleCard implements Card {
   }
 
   @Override
+  public String getValueGivenDirection(Direction direction) {
+    if (direction == null) {
+      throw new IllegalArgumentException("Direction cannot be null");
+    }
+    return cardValues.get(direction).toString();
+  }
+
+  @Override
   public String getName() {
     return name;
   }

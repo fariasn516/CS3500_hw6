@@ -62,7 +62,7 @@ public class ThreeTriosTextViewTest {
 
     String expectedView = "Player: BLUE\n" +
             "Grid:\n" +
-            " R\n" +
+            "R \n" +
             "__\n" +
             "Hand:\n" +
             "ox 2 4 4 4 \n" +

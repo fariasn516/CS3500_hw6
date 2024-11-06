@@ -189,7 +189,7 @@ public class ThreeTriosModelTest {
   }
 
   // places a card when the card already exists in the same spot
-  @Test (expected = IllegalStateException.class)
+  @Test (expected = IllegalArgumentException.class)
   public void testPlacingPhaseCardAlreadyExists() {
     hasSeededRandom.startGame(deck, true, gridWithNoHoles);
     hasSeededRandom.placingPhase(oxCard, 0, 0);
@@ -197,7 +197,7 @@ public class ThreeTriosModelTest {
   }
 
   // places a card where there is a hole
-  @Test (expected = IllegalStateException.class)
+  @Test (expected = IllegalArgumentException.class)
   public void shouldThrowIllegalStatePlacingPhaseHole() {
     List<Card> sampleDeck = List.of(this.ratCard, this.oxCard, this.tigerCard, this.rabbitCard,
             this.dragonCard, this.monkeyCard);

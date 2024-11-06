@@ -117,6 +117,9 @@ public class ThreeTriosModel implements Model {
   @Override
   public void placingPhase(Card card, int row, int col) {
     checkGameState();
+    if (!isLegalToPlay(row, col)) {
+      throw new IllegalArgumentException("Illegal move: cannot play here.");
+    }
     currentPlayer.removeFromHand(card);
     currentPlayer.addToOwnership(card);
     grid.placeCard(card, row, col);
@@ -241,13 +244,15 @@ public class ThreeTriosModel implements Model {
     if (!this.gameEnded) {
       throw new IllegalStateException("Game has not ended!");
     }
-    if (this.bluePlayer.getNumberCardsOwned() > this.redPlayer.getNumberCardsOwned()) {
+
+    int blueScore = currentScore(bluePlayer);
+    int redScore = currentScore(redPlayer);
+
+    if (blueScore > redScore) {
       return "Blue Player";
-    }
-    else if (this.bluePlayer.getNumberCardsOwned() == this.redPlayer.getNumberCardsOwned()) {
+    } else if (blueScore == redScore) {
       return "Tie";
-    }
-    else {
+    } else {
       return "Red Player";
     }
   }
@@ -287,5 +292,63 @@ public class ThreeTriosModel implements Model {
     if (gameEnded) {
       throw new IllegalStateException("Game already ended!");
     }
+  }
+
+  @Override
+  public Player getOwnerAtCell(int row, int col) {
+    Card card = grid.getCard(row, col);
+    if (card == null) {
+      throw new IllegalArgumentException("This cell is a hole or there is no card placed.");
+    }
+
+    if (redPlayer.getOwnedCardsOnGrid().contains(card)) {
+      return redPlayer;
+    }
+    else  {
+      return bluePlayer;
+    }
+  }
+
+  @Override
+  public boolean isLegalToPlay(int row, int col) {
+    if (row < 0 || row >= grid.getNumRows() || col < 0 || col >= grid.getNumCols()) {
+      return false;
+    }
+    Cell cell = grid.getCells()[row][col];
+    return !cell.isHole() && !cell.hasCard();
+  }
+
+  @Override
+  public int howManyWillFlip(Card card, int row, int col) {
+    if (grid.getCells()[row][col].isHole()) {
+      throw new IllegalArgumentException("This cell is a hole; no cards can be played here.");
+    }
+
+    int flipCount = 0;
+    Map<String, Direction> adjacentCards = grid.getAdjacentCardsWithDirections(row, col);
+
+    for (Map.Entry<String, Direction> entry : adjacentCards.entrySet()) {
+      String adjCardName = entry.getKey();
+      Direction direction = entry.getValue();
+      Direction oppositeDirection = getOppositeDirection(direction);
+
+      Card adjCard = findCardByName(adjCardName);
+
+      Color adjCardOwnerColor = getCardOwnerColor(adjCard);
+      Color currentPlayerColor = currentPlayer.getColor();
+
+      if (adjCardOwnerColor != null && adjCardOwnerColor != currentPlayerColor) {
+        if (card.getValueFromDirection(direction) > adjCard.getValueFromDirection(oppositeDirection)) {
+          flipCount++;
+        }
+      }
+    }
+
+    return flipCount;
+  }
+
+  @Override
+  public int currentScore(Player player) {
+    return player.getCardsInHand().size() + player.getOwnedCardsOnGrid().size();
   }
 }

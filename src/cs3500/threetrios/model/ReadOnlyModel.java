@@ -56,4 +56,46 @@ public interface ReadOnlyModel {
    * @return the list of cards in the red player's hand
    */
   List<Card> getRedPlayer();
+
+  /**
+   * Returns the player who owns the card at the specified grid cell.
+   *
+   * @param row the row of the grid cell
+   * @param col the column of the grid cell
+   * @return the player who owns the card in the specified cell
+   * @throws IllegalArgumentException if the specified cell is empty (hole or no card placed)
+   */
+  Player getOwnerAtCell(int row, int col);
+
+  /**
+   * Determines if the current player can legally play a card at the specified cell.
+   *
+   * @param row the row of the grid cell to check
+   * @param col the column of the grid cell to check
+   * @return true if the current player can legally play at the specified cell, false otherwise
+   * @throws IllegalArgumentException if the specified coordinates are out of bounds
+   */
+  boolean isLegalToPlay(int row, int col);
+
+  /**
+   * Calculates how many cards a player can flip by playing the specified card at the given cell.
+   *
+   * @param card the card to be played
+   * @param row the row of the grid cell where the card is being played
+   * @param col the column of the grid cell where the card is being played
+   * @return the number of cards that will be flipped if the card is played at the specified cell
+   * @throws IllegalArgumentException if the specified cell is a hole (i.e., cannot play here)
+   */
+  int howManyWillFlip(Card card, int row, int col);
+
+  /**
+   * Calculates the current score for the specified player.
+   *
+   * The score is defined as the total number of cards the player owns in their hand plus
+   * the number of cards they own on the grid.
+   *
+   * @param player the player whose score is to be calculated
+   * @return the total score of the specified player
+   */
+  int currentScore(Player player);
 }

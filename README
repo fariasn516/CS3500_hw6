@@ -76,3 +76,15 @@ cs3500.threetrios.model:
 cs3500.threetrios.view:
     ThreeTriosGameTextView - A text-based rendering of the current game state, useful for debugging
     or console-based gameplay.
+
+Changes for part 2:
+    -removed color field from card and added method to model to replace that functionality
+    -added observations required in assignment 6 STILL NEED TO TEST
+
+                           Player getOwnerAtCell(int row, int col);
+
+                           boolean isLegalToPlay(int row, int col);
+
+                           int howManyWillFlip(Card card, int row, int col);
+
+                           int currentScore(Player player);

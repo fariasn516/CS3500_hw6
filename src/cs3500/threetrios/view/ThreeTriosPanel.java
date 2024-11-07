@@ -66,7 +66,7 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
             g2d.setColor(Color.PINK);
           }
           else if (color.equals("BLUE")) {
-            g2d.setColor(Color.BLUE);
+            g2d.setColor(new Color (96, 166, 245));
           }
           g2d.fillRect(col * 150 + 200, row * 150, 150, 150);
           g2d.setColor(Color.BLACK);
@@ -145,7 +145,8 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
     int startBlueHeight = 0;
 
     for (int numBlueCards = 0; numBlueCards < model.getBluePlayer().size(); numBlueCards++) {
-      g2d.setColor(Color.BLUE);
+      Color blueCard = new Color (96, 166, 245);
+      g2d.setColor(blueCard);
       g2d.fillRect(getWidth() - 150, startBlueHeight, 150, blueHeight);
       g2d.setColor(Color.BLACK);
       g2d.drawRect(getWidth() - 150, startBlueHeight, 150, blueHeight);

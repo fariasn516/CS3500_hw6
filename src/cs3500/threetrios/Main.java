@@ -41,7 +41,6 @@ public class Main {
     };
     Grid gridWithNoHoles = new GameGrid(3, 3, noHolesLayout);
 
-    //model.startGame(deck, false, gridWithNoHoles);
     //model.placingPhase(ratCard, 1, 0);
 
     ReadOnlyModel readModel = model;

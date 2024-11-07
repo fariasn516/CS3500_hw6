@@ -1,11 +1,13 @@
 package cs3500.threetrios.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import java.awt.geom.AffineTransform;
 import java.util.List;
 
 import cs3500.threetrios.model.Card;
@@ -29,6 +31,11 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
   }
 
   @Override
+  public void addClickListener() {
+    this.addMouseListener(new ThreeTriosMouseListener());
+  }
+
+  @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
@@ -45,6 +52,9 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
   private void drawGrid(Graphics2D g2d) {
     Cell[][] cells = model.getGrid().getCells();
 
+    int cellHeight = getHeight() / model.getGrid().getNumRows();
+    int cellWidth = (getWidth() - 400) / model.getGrid().getNumCols();
+
     for (int row = 0; row < model.getGrid().getNumRows(); row++) {
       for (int col = 0; col < model.getGrid().getNumCols(); col++) {
         Cell cell = cells[row][col];
@@ -54,42 +64,48 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
         }
         else if (!cell.hasCard()) {
           g2d.setColor(Color.LIGHT_GRAY);
-          g2d.fillRect(col * 150 + 200, row * 150, 150, 150);
+          g2d.fillRect(col * cellWidth + 200, row * cellHeight, cellWidth, cellHeight);
           g2d.setColor(Color.BLACK);
-          g2d.drawRect(col * 150 + 200, row * 150, 150, 150);
+          g2d.drawRect(col * cellWidth + 200, row * cellHeight, cellWidth, cellHeight);
         }
         else {
           Card card = cell.getCard();
           String color = this.model.getCardOwnerColor(card).toString();
-          System.out.println(color);
           if (color.equals("RED")) {
             g2d.setColor(Color.PINK);
           }
           else if (color.equals("BLUE")) {
             g2d.setColor(new Color (96, 166, 245));
           }
-          g2d.fillRect(col * 150 + 200, row * 150, 150, 150);
+          g2d.fillRect(col * cellWidth + 200, row * cellHeight, cellWidth, cellHeight);
           g2d.setColor(Color.BLACK);
-          g2d.drawRect(col * 150 + 200, row * 150, 150, 150);
-          drawCard(card, col, row, g2d);
+          g2d.drawRect(col * cellWidth + 200, row * cellHeight, cellWidth, cellHeight);
+          drawCard(card, col, row, g2d, cellWidth, cellHeight);
         }
       }
     }
   }
 
-  private void drawCard(Card card, int col, int row, Graphics2D g2d) {
+  /**
+   *
+   * @param card
+   * @param col
+   * @param row
+   * @param g2d
+   */
+  private void drawCard(Card card, int col, int row, Graphics2D g2d, int width, int height) {
     // north
     g2d.drawString(card.getValueGivenDirection(Direction.NORTH),
-            col * 150 + 225 + 50, row * 150 + 150 / 4);
+            col * width + width / 2 + 200, row * height + height / 4);
     // south
     g2d.drawString(card.getValueGivenDirection(Direction.SOUTH),
-            col * 150 + 225 + 50, row * 150 + 130);
+            col * width + width / 2 + 200, row * height + height - 20);
     // east
     g2d.drawString(card.getValueGivenDirection(Direction.EAST),
-            col * 150 + 275 + 50, row * 150 + 75);
+            col * width + width + 175, row * height + height / 2);
     // west
     g2d.drawString(card.getValueGivenDirection(Direction.WEST),
-            col * 150 + 175 + 50, row * 150 + 75);
+            col * width + 225, row * height + height / 2);
   }
 
   /**
@@ -167,15 +183,38 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
     }
   }
 
+  // COPIED STUFF FROM TIC TAC TOE EXERCISE REVIEW!!!!!
+  private Dimension getLocalDimensions() {
+    return new Dimension(30, 30);
+  }
+
+  private AffineTransform getLogicalToPhysicalXForm() {
+    AffineTransform xform = new AffineTransform();
+    Dimension dims = getLocalDimensions();
+    xform.scale(this.getWidth() / dims.getWidth(), this.getHeight() / dims.getHeight());
+    return xform;
+  }
+
+  private AffineTransform getModelToLogicalXForm() {
+    AffineTransform xform = new AffineTransform();
+    Dimension dims = getLocalDimensions();
+    xform.scale(dims.getWidth() / 3, dims.getHeight() / 3);
+    return xform;
+  }
+  // END OF COPIED STUFF FROM TIC TAC TOE EXERCISE
 
   /**
    *
    */
   class ThreeTriosMouseListener implements MouseListener {
 
+    public ThreeTriosMouseListener() {
+
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-
+      System.err.println(e.getX() + ", " + e.getY());
     }
 
     @Override

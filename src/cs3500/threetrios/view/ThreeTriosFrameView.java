@@ -7,6 +7,11 @@ public interface ThreeTriosFrameView {
   void refresh();
 
   /**
+   *
+   */
+  void addClickListener();
+
+  /**
    * Make the view visible to start the game session.
    */
   void makeVisible();

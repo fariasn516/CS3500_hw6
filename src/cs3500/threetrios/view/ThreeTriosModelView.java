@@ -27,6 +27,11 @@ public class ThreeTriosModelView extends JFrame implements ThreeTriosFrameView {
   }
 
   @Override
+  public void addClickListener() {
+    panel.addClickListener();
+  }
+
+  @Override
   public void makeVisible() {
     this.setVisible(true);
   }

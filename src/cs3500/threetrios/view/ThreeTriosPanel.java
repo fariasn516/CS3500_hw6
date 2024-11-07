@@ -1,15 +1,13 @@
 package cs3500.threetrios.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
+import cs3500.threetrios.Controller.Controller;
 import cs3500.threetrios.model.Card;
 
 
@@ -31,8 +29,8 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
   }
 
   @Override
-  public void addClickListener() {
-    this.addMouseListener(new ThreeTriosMouseListener());
+  public void addClickListener(Controller listener) {
+    this.addMouseListener(new ThreeTriosMouseListener(listener));
   }
 
   @Override
@@ -207,9 +205,9 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
    *
    */
   class ThreeTriosMouseListener implements MouseListener {
-
-    public ThreeTriosMouseListener() {
-
+    private final Controller features;
+    public ThreeTriosMouseListener(Controller features) {
+      this.features = features;
     }
 
     @Override

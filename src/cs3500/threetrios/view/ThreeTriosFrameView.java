@@ -1,5 +1,7 @@
 package cs3500.threetrios.view;
 
+import cs3500.threetrios.Controller.Controller;
+
 public interface ThreeTriosFrameView {
   /**
    * Refresh the view to reflect any changes in the game state.
@@ -9,7 +11,7 @@ public interface ThreeTriosFrameView {
   /**
    *
    */
-  void addClickListener();
+  void addClickListener(Controller listener);
 
   /**
    * Make the view visible to start the game session.

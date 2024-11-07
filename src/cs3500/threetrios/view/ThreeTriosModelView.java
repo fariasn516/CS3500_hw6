@@ -2,6 +2,7 @@ package cs3500.threetrios.view;
 
 import javax.swing.JFrame;
 
+import cs3500.threetrios.Controller.Controller;
 import cs3500.threetrios.model.ReadOnlyModel;
 
 public class ThreeTriosModelView extends JFrame implements ThreeTriosFrameView {
@@ -15,8 +16,7 @@ public class ThreeTriosModelView extends JFrame implements ThreeTriosFrameView {
   public ThreeTriosModelView(ReadOnlyModel model) {
     this.panel = new ThreeTriosPanel(model);
     this.model = model;
-    this.setSize(model.getGrid().getNumCols() * 150 + 300 + 100,
-            model.getGrid().getNumRows() * 150);
+    this.setSize(1000, 1000);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.add(panel);
   }
@@ -27,8 +27,8 @@ public class ThreeTriosModelView extends JFrame implements ThreeTriosFrameView {
   }
 
   @Override
-  public void addClickListener() {
-    panel.addClickListener();
+  public void addClickListener(Controller listener) {
+    panel.addClickListener(listener);
   }
 
   @Override

@@ -2,6 +2,8 @@ package cs3500.threetrios;
 
 import java.util.List;
 
+import cs3500.threetrios.Controller.Controller;
+import cs3500.threetrios.Controller.ThreeTriosSwingController;
 import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.GameGrid;
 import cs3500.threetrios.model.Grid;
@@ -39,12 +41,15 @@ public class Main {
     };
     Grid gridWithNoHoles = new GameGrid(3, 3, noHolesLayout);
 
-    model.startGame(deck, false, gridWithNoHoles);
-    model.placingPhase(ratCard, 1, 0);
+    //model.startGame(deck, false, gridWithNoHoles);
+    //model.placingPhase(ratCard, 1, 0);
 
     ReadOnlyModel readModel = model;
 
     ThreeTriosFrameView view = new ThreeTriosModelView(readModel);
-    view.makeVisible();
+    //view.makeVisible();
+    Controller controller = new ThreeTriosSwingController(view);
+    controller.playGame(model, deck, gridWithNoHoles, false);
+
   }
 }

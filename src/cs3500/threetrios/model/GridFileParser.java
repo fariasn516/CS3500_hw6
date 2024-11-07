@@ -19,6 +19,10 @@ public class GridFileParser {
     this.file = file;
   }
 
+  public GridFileParser(String filename) {
+    this.file = new File(filename);
+  }
+
   /**
    * Parses the grid configuration file and creates a new GameGrid instance.
    *

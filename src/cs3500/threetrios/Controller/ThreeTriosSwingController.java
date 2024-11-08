@@ -78,7 +78,12 @@ public class ThreeTriosSwingController implements Controller {
   }
 
   @Override
-  public void handleCellClick() {
+  public void handleCellClick(int row, int column) {
     view.refresh();
+  }
+
+  @Override
+  public void handleHandClick(int index) {
+
   }
 }

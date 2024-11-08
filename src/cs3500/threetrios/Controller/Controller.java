@@ -24,7 +24,15 @@ public interface Controller {
   void playGame(Model model, List<Card> deck, Grid grid, boolean shuffle);
 
   /**
-   *
+   * Handles when a cell on the grid is clicked.
+   * @param row represents the row of the cell that was clicked
+   * @param column represents the column of the cell that was clicked
    */
-  void handleCellClick();
+  void handleCellClick(int row, int column);
+
+  /**
+   * Handles when the card of a player is clicked.
+   * @param index represents the card index that was clicked
+   */
+  void handleHandClick(int index);
 }

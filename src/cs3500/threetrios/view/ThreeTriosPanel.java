@@ -181,26 +181,6 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
     }
   }
 
-  // COPIED STUFF FROM TIC TAC TOE EXERCISE REVIEW!!!!!
-  private Dimension getLocalDimensions() {
-    return new Dimension(30, 30);
-  }
-
-  private AffineTransform getLogicalToPhysicalXForm() {
-    AffineTransform xform = new AffineTransform();
-    Dimension dims = getLocalDimensions();
-    xform.scale(this.getWidth() / dims.getWidth(), this.getHeight() / dims.getHeight());
-    return xform;
-  }
-
-  private AffineTransform getModelToLogicalXForm() {
-    AffineTransform xform = new AffineTransform();
-    Dimension dims = getLocalDimensions();
-    xform.scale(dims.getWidth() / 3, dims.getHeight() / 3);
-    return xform;
-  }
-  // END OF COPIED STUFF FROM TIC TAC TOE EXERCISE
-
   /**
    *
    */
@@ -212,12 +192,48 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-      System.err.println(e.getX() + ", " + e.getY());
+      if (e.getX() <= 150) {
+        System.out.println("red player");
+        findCardIndex(e.getY(), "red");
+      }
+      else if (e.getX() >= 200 && e.getX() <= getWidth() - 200) {
+        System.out.println("grid");
+        findGridIndex(e.getX(), e.getY());
+      }
+      else if (e.getX() >= getWidth() - 150 && e.getX() <= getWidth()) {
+        System.out.println("blue player");
+        findCardIndex(e.getY(), "blue");
+      }
+    }
+
+    /**
+     * Finds the card index give the color of the player and the y-position of the click (indexing
+     * starts at 0).
+     * @param yClick represents the y-coordinate of the mouse click
+     * @param playerColor represents the color of the player that the card belongs to
+     */
+    private void findCardIndex(int yClick, String playerColor) {
+      if (playerColor.equals("red")) {
+        System.out.println(yClick / (getHeight() / model.getRedPlayer().size()));
+      }
+      else {
+        System.out.println(yClick / (getHeight() / model.getBluePlayer().size()));
+      }
+    }
+
+    /**
+     * Finds the indexing of the grid based on the x and y positioning of the click.
+     * (0,0) represents the top left-most cell.
+     * @param xClick
+     * @param yClick
+     */
+    private void findGridIndex(int xClick, int yClick) {
+      System.out.println(xClick / (getWidth() / model.getGrid().getNumRows()) + ", "
+              + yClick / (getHeight() / model.getGrid().getNumCols()));
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override

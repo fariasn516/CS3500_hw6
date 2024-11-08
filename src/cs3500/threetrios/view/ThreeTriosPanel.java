@@ -214,22 +214,22 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
      */
     private void findCardIndex(int yClick, String playerColor) {
       if (playerColor.equals("red")) {
-        System.out.println(yClick / (getHeight() / model.getRedPlayer().size()));
+        System.err.println(yClick / (getHeight() / model.getRedPlayer().size()));
       }
       else {
-        System.out.println(yClick / (getHeight() / model.getBluePlayer().size()));
+        System.err.println(yClick / (getHeight() / model.getBluePlayer().size()));
       }
     }
 
     /**
      * Finds the indexing of the grid based on the x and y positioning of the click.
-     * (0,0) represents the top left-most cell.
+     * (0,0) represents the top left-most cell and goes by row-column indexing.
      * @param xClick
      * @param yClick
      */
     private void findGridIndex(int xClick, int yClick) {
-      System.out.println(xClick / (getWidth() / model.getGrid().getNumRows()) + ", "
-              + yClick / (getHeight() / model.getGrid().getNumCols()));
+      System.err.println(yClick / (getHeight() / model.getGrid().getNumCols()) + ", "
+              + xClick / (getWidth() / model.getGrid().getNumRows()));
     }
 
     @Override

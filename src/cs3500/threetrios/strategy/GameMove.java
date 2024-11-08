@@ -1,4 +1,6 @@
-package cs3500.threetrios.model;
+package cs3500.threetrios.strategy;
+
+import cs3500.threetrios.model.Card;
 
 /**
  * Represents a move in the Three Trios game.

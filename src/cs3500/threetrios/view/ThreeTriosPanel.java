@@ -1,31 +1,35 @@
 package cs3500.threetrios.view;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import java.awt.geom.AffineTransform;
 import java.util.List;
-
-import cs3500.threetrios.Controller.Controller;
-import cs3500.threetrios.model.Card;
-
 
 import javax.swing.JPanel;
 
+import cs3500.threetrios.Controller.Controller;
+import cs3500.threetrios.model.Card;
 import cs3500.threetrios.model.Cell;
 import cs3500.threetrios.model.Direction;
 import cs3500.threetrios.model.ReadOnlyModel;
 
 public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
-  private final ReadOnlyModel model;
+  private final ReadOnlyModel model; // represents the model whose characteristics to be printed
+  private boolean clickedAlready; // represents whether a cell has been clicked already
+  private int index; // represents the index of a clicked card (is -1 if no card clicked)
 
   /**
-   *
-   * @param model
+   * Constructor the for panel. Takes in a ReadOnlyModel that is immutable.
+   * @param model represent the ReadOnlyModel that the panel takes in
    */
   public ThreeTriosPanel(ReadOnlyModel model) {
     this.model = model;
+    this.index = -1;
+    this.clickedAlready = false;
   }
 
   @Override
@@ -49,7 +53,6 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
    */
   private void drawGrid(Graphics2D g2d) {
     Cell[][] cells = model.getGrid().getCells();
-
     int cellHeight = getHeight() / model.getGrid().getNumRows();
     int cellWidth = (getWidth() - 400) / model.getGrid().getNumCols();
 
@@ -58,7 +61,7 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
         Cell cell = cells[row][col];
         if (cell.isHole()) {
           g2d.setColor(Color.YELLOW);
-          g2d.fillRect(150, 200, 150, 150);
+          g2d.fillRect(col * cellWidth + 200, row * cellHeight, cellWidth, cellHeight);
         }
         else if (!cell.hasCard()) {
           g2d.setColor(Color.LIGHT_GRAY);
@@ -85,11 +88,11 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
   }
 
   /**
-   *
-   * @param card
-   * @param col
-   * @param row
-   * @param g2d
+   * Draws the card that is on the grid at the particular row & col.
+   * @param card represents the card to be drawn
+   * @param col represents the column of the card
+   * @param row represents the row of the card
+   * @param g2d represents the 2d graphics object
    */
   private void drawCard(Card card, int col, int row, Graphics2D g2d, int width, int height) {
     // north
@@ -131,7 +134,15 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
       g2d.setColor(Color.PINK);
       g2d.fillRect(0, startRedHeight, 150, redHeight);
       g2d.setColor(Color.BLACK);
-      g2d.drawRect(0, startRedHeight, 150, redHeight);
+      if (index == numRedCards && !clickedAlready
+              && model.getCurrentPlayer().getColor().toString().equals("RED")) {
+        g2d.setStroke(new BasicStroke(3));
+        g2d.drawRect(0, startRedHeight, 150, redHeight);
+        g2d.setStroke(new BasicStroke(1));
+      }
+      else {
+        g2d.drawRect(0, startRedHeight, 150, redHeight);
+      }
 
       // north
       g2d.drawString(redCards.get(numRedCards).getValueGivenDirection(Direction.NORTH),
@@ -185,7 +196,12 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
    *
    */
   class ThreeTriosMouseListener implements MouseListener {
-    private final Controller features;
+    private final Controller features; //
+
+    /**
+     *
+     * @param features
+     */
     public ThreeTriosMouseListener(Controller features) {
       this.features = features;
     }
@@ -204,6 +220,7 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
         System.out.println("blue player");
         findCardIndex(e.getY(), "blue");
       }
+      features.handleHandClick(index);
     }
 
     /**
@@ -214,41 +231,62 @@ public class ThreeTriosPanel extends JPanel implements ThreeTriosPanelView {
      */
     private void findCardIndex(int yClick, String playerColor) {
       if (playerColor.equals("red")) {
-        System.err.println(yClick / (getHeight() / model.getRedPlayer().size()));
+        if (clickedAlready) {
+          clickedAlready = false;
+        }
+        else if (index == yClick / (getHeight() / model.getRedPlayer().size())) {
+          clickedAlready = true;
+          index = -1;
+          System.err.println(index);
+        }
+        index = yClick / (getHeight() / model.getRedPlayer().size());
+        System.err.println(index);
       }
       else {
-        System.err.println(yClick / (getHeight() / model.getBluePlayer().size()));
+        if (index == yClick / (getHeight() / model.getRedPlayer().size())) {
+          clickedAlready = true;
+          index = -1;
+        }
+        else if (index != yClick / (getHeight() / model.getRedPlayer().size()) && clickedAlready) {
+          clickedAlready = false;
+        }
+        index = yClick / (getHeight() / model.getBluePlayer().size());
+        System.err.println(index);
       }
     }
 
     /**
      * Finds the indexing of the grid based on the x and y positioning of the click.
      * (0,0) represents the top left-most cell and goes by row-column indexing.
-     * @param xClick
-     * @param yClick
+     * @param xClick represents the x coordinate of the click
+     * @param yClick represents the y coordinate of the click
      */
     private void findGridIndex(int xClick, int yClick) {
-      System.err.println(yClick / (getHeight() / model.getGrid().getNumCols()) + ", "
-              + xClick / (getWidth() / model.getGrid().getNumRows()));
+      System.err.println(xClick);
+      System.err.println(yClick);
+
+      System.err.println(yClick / (getHeight() / model.getGrid().getNumRows()) + ", "
+              + (xClick / ((getWidth() - 400) / model.getGrid().getNumCols()) - 1));
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+      // no need to implement
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+      // no need to implement
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+      // no need to implement
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+      // no need to implement
     }
   }
 }

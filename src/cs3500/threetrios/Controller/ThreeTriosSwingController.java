@@ -9,12 +9,18 @@ import cs3500.threetrios.model.Grid;
 import cs3500.threetrios.model.GridFileParser;
 import cs3500.threetrios.model.Model;
 import cs3500.threetrios.view.ThreeTriosFrameView;
-import cs3500.threetrios.view.ThreeTriosModelView;
 
+/**
+ * Controller class that takes in the user's inputs, feeding to the model and
+ * allowing the user to play the game.
+ */
 public class ThreeTriosSwingController implements Controller {
-  private ThreeTriosFrameView view;
-  private Model model;
+  private final ThreeTriosFrameView view; // view that shows everything graphically
 
+  /**
+   * The controller class that utilizes the user input to
+   * @param view represents the view that will be printing out things graphically
+   */
   public ThreeTriosSwingController(ThreeTriosFrameView view) {
     this.view = view;
   }
@@ -24,7 +30,7 @@ public class ThreeTriosSwingController implements Controller {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null.");
     }
-    this.model = model;
+
     CardFileParser deckParse = new CardFileParser(cardFilePath);
     GridFileParser gridParse = new GridFileParser(gridFilePath);
     List<Card> deck;
@@ -44,18 +50,12 @@ public class ThreeTriosSwingController implements Controller {
     catch (IllegalStateException e) {
       throw new IllegalStateException(e.getMessage());
     }
+
     view.addClickListener(this);
     view.makeVisible();
-
   }
 
-  /**
-   * Overloaded method in order to make testing easier.
-   * @param model
-   * @param deck
-   * @param grid
-   * @param shuffle
-   */
+  @Override
   public void playGame(Model model, List<Card> deck, Grid grid, boolean shuffle) {
     if (model == null) {
       throw new IllegalArgumentException("Model cannot be null.");
@@ -66,7 +66,6 @@ public class ThreeTriosSwingController implements Controller {
     if (grid == null) {
       throw new IllegalArgumentException("Grid cannot be null.");
     }
-
     try {
       model.startGame(deck, shuffle, grid);
     }
@@ -79,11 +78,13 @@ public class ThreeTriosSwingController implements Controller {
 
   @Override
   public void handleCellClick(int row, int column) {
+    // has not been actually implemented yet, and as such does not have any tests for it
     view.refresh();
   }
 
   @Override
   public void handleHandClick(int index) {
-
+    // has not been actually implemented yet, and as such does not have any tests for it
+    view.refresh();
   }
 }

@@ -48,12 +48,14 @@ public interface ReadOnlyModel {
   /**
    * Returns the list of cards in the blue player's hand.
    * @return the list of cards in the blue player's hand
+   * @throws IllegalStateException if the game has not started
    */
   List<Card> getBluePlayer();
 
   /**
    * Returns the list of cards in the red player's hand.
    * @return the list of cards in the red player's hand
+   * @throws IllegalStateException if the game has not started
    */
   List<Card> getRedPlayer();
 
@@ -64,6 +66,7 @@ public interface ReadOnlyModel {
    * @param col the column of the grid cell
    * @return the player who owns the card in the specified cell
    * @throws IllegalArgumentException if the specified cell is empty (hole or no card placed)
+   * @throws IllegalStateException if the game has not started yet
    */
   Player getOwnerAtCell(int row, int col);
 
@@ -74,6 +77,7 @@ public interface ReadOnlyModel {
    * @param col the column of the grid cell to check
    * @return true if the current player can legally play at the specified cell, false otherwise
    * @throws IllegalArgumentException if the specified coordinates are out of bounds
+   * @throws IllegalStateException if the game has not started yet
    */
   boolean isLegalToPlay(int row, int col);
 
@@ -85,6 +89,7 @@ public interface ReadOnlyModel {
    * @param col the column of the grid cell where the card is being played
    * @return the number of cards that will be flipped if the card is played at the specified cell
    * @throws IllegalArgumentException if the specified cell is a hole (i.e., cannot play here)
+   * @throws IllegalStateException if the game has not started yet
    */
   int howManyWillFlip(Card card, int row, int col);
 
@@ -96,6 +101,7 @@ public interface ReadOnlyModel {
    *
    * @param player the player whose score is to be calculated
    * @return the total score of the specified player
+   * @throws IllegalStateException if the game has not started yet
    */
   int currentScore(Player player);
 }

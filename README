@@ -80,6 +80,9 @@ cs3500.threetrios.view:
 Changes for part 2:
     -removed color field from card and added method to model to replace that functionality
     -added observations required in assignment 6 STILL NEED TO TEST
+                           List<Card> getRedPlayer();
+
+                           List<Card> getBluePlayer();
 
                            Player getOwnerAtCell(int row, int col);
 
@@ -88,3 +91,16 @@ Changes for part 2:
                            int howManyWillFlip(Card card, int row, int col);
 
                            int currentScore(Player player);
+  New Class/Interfaces:
+  cs3500.threetrios.strategy:
+     GameStrategy (interface)
+     GameMove (class)
+     CornerCardStrat (class)
+     MaxFlippedCardStrat (class)
+
+  cs3500.threetrios.view
+     ThreeTriosFrameView (interface)
+     ThreeTriosPanelView (interface)
+     ThreeTriosModelView (class) --> implements ThreeTriosFrameView
+     ThreeTriosPanel (class) --> implements ThreeTriosPanelView
+

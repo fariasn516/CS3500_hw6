@@ -31,34 +31,34 @@ import cs3500.threetrios.model.Value;
  */
 public class ThreeTriosModelTest {
   // models
-  Model hasSeededRandom;
-  Model noSeededRandom;
+  protected Model hasSeededRandom;
+  protected Model noSeededRandom;
 
   // some players
-  Player redHumanPlayer;
-  Player blueHumanPlayer;
+  protected Player redHumanPlayer;
+  protected Player blueHumanPlayer;
 
-  GameCell cellWithHole;
-  GameCell cellWithoutHole;
+  protected GameCell cellWithHole;
+  protected GameCell cellWithoutHole;
   // some grids
-  Grid gridWithNoHoles;
-  Grid gridWithHoles;
+  protected Grid gridWithNoHoles;
+  protected Grid gridWithHoles;
 
   // some cards
-  SimpleCard ratCard;
-  SimpleCard oxCard;
-  SimpleCard tigerCard;
-  SimpleCard rabbitCard;
-  SimpleCard dragonCard;
-  SimpleCard snakeCard;
-  SimpleCard horseCard;
-  SimpleCard goatCard;
-  SimpleCard monkeyCard;
-  SimpleCard roosterCard;
-  SimpleCard dogCard;
-  SimpleCard pigCard;
+  protected SimpleCard ratCard;
+  protected SimpleCard oxCard;
+  protected SimpleCard tigerCard;
+  protected SimpleCard rabbitCard;
+  protected SimpleCard dragonCard;
+  protected SimpleCard snakeCard;
+  protected SimpleCard horseCard;
+  protected SimpleCard goatCard;
+  protected SimpleCard monkeyCard;
+  protected SimpleCard roosterCard;
+  protected SimpleCard dogCard;
+  protected SimpleCard pigCard;
 
-  List<SimpleCard> deck;
+  protected List<SimpleCard> deck;
 
   @Before
   public void init() {
@@ -66,8 +66,8 @@ public class ThreeTriosModelTest {
     this.hasSeededRandom = new ThreeTriosModel(new Random(47));
     this.noSeededRandom = new ThreeTriosModel();
 
-    cellWithHole = new GameCell(true);
-    cellWithoutHole = new GameCell(false);
+    this.cellWithHole = new GameCell(true);
+    this.cellWithoutHole = new GameCell(false);
 
     // initializing cards
     this.ratCard = new SimpleCard("rat", Value.ACE, Value.ONE, Value.TWO, Value.THREE);
@@ -104,6 +104,7 @@ public class ThreeTriosModelTest {
             {true, false, true},
             {false, true, false}
     };
+
     this.gridWithHoles = new GameGrid(3, 3, holesLayout);
   }
 
@@ -940,4 +941,108 @@ public class ThreeTriosModelTest {
     Assert.assertEquals(expectedNumCols, result.getNumCols());
     Assert.assertArrayEquals(expectedHoleLayout, result.getHoleLayout());
   }
+
+  // TESTING NEW ADDED OBSERVATIONS FROM THE MODEL
+  // test getRedPlayer method
+  // throw exception when game not started
+  @Test (expected = IllegalStateException.class)
+  public void shouldReturnIllegalStateGetRedPlayer() {
+    this.noSeededRandom.getRedPlayer();
+  }
+  // make sure nothing is mutated from original
+  @Test
+  public void shouldNotMutateGetRedPlayer() {
+    this.hasSeededRandom.startGame(this.deck, false, this.gridWithNoHoles);
+    int numCards = this.hasSeededRandom.getRedPlayer().size();
+    Assert.assertEquals(5, numCards);
+    List<Card> redPlayerCards = this.hasSeededRandom.getRedPlayer();
+    redPlayerCards.add(this.roosterCard);
+    Assert.assertEquals(5, this.hasSeededRandom.getRedPlayer().size());
+  }
+
+  // make sure correct cards
+  @Test
+  public void shouldContainCorrectCardsRedPlayer() {
+    this.hasSeededRandom.startGame(this.deck, false, this.gridWithNoHoles);
+    List<Card> expectedCards = List.of(this.ratCard, this.tigerCard, this.dragonCard,
+            this.goatCard, this.roosterCard);
+    Assert.assertEquals(expectedCards, this.hasSeededRandom.getRedPlayer());
+  }
+
+  // test getBluePlayer method
+  @Test (expected = IllegalStateException.class)
+  public void shouldReturnIllegalStateGetBluePlayer() {
+    this.noSeededRandom.getBluePlayer();
+  }
+
+  // make sure nothing is mutated from original
+  @Test
+  public void shouldNotMutateGetBluePlayer() {
+    this.hasSeededRandom.startGame(this.deck, false, this.gridWithNoHoles);
+    int numCards = this.hasSeededRandom.getBluePlayer().size();
+    Assert.assertEquals(5, numCards);
+    List<Card> redPlayerCards = this.hasSeededRandom.getBluePlayer();
+    redPlayerCards.add(this.roosterCard);
+    Assert.assertEquals(5, this.hasSeededRandom.getBluePlayer().size());
+  }
+
+  // make sure correct cards
+  @Test
+  public void shouldContainCorrectCardsBluePlayer() {
+    this.hasSeededRandom.startGame(this.deck, false, this.gridWithNoHoles);
+    List<Card> expectedCards = List.of(this.oxCard, this.rabbitCard, this.horseCard,
+            this.monkeyCard, this.dogCard);
+    Assert.assertEquals(expectedCards, this.hasSeededRandom.getBluePlayer());
+  }
+
+  // test getOwnerAtCell method
+  // when the game has not started yet
+  @Test (expected = IllegalStateException.class)
+  public void shouldReturnIllegalStateGetOwnerAtCell() {
+    this.hasSeededRandom.getOwnerAtCell(0, 0);
+  }
+
+  // when there is no owner on the cell
+
+  // when the red player owns the cell
+
+  // when the blue player owns the cell
+
+  // test isLegalToPlay method
+  // when the game has not started yet
+  @Test (expected = IllegalStateException.class)
+  public void shouldReturnIllegalStateLegalPlay() {
+    this.hasSeededRandom.isLegalToPlay(0, 0);
+  }
+
+  // when the row and col are out of bounds
+
+  // when the row and col are in bounds
+
+  // test howManyWillFlip method
+  @Test (expected = IllegalStateException.class)
+  public void shouldReturnIllegalStateHowManyFlip() {
+    this.hasSeededRandom.howManyWillFlip(this.ratCard,0, 0);
+  }
+
+  // when nothing will flip
+
+  // when something will flip
+
+  // when the card does not exist
+
+  // when the row/col are out of bounds
+
+  // test currentScore method
+  // when the game has not started (should throw and exception)
+  @Test (expected = IllegalStateException.class)
+  public void shouldReturnIllegalStateCurrentScore() {
+    this.hasSeededRandom.currentScore(blueHumanPlayer);
+  }
+
+  // when the game has just started and there is no score
+
+  // when cards have been played and there is a score
+
+  // when cards have been flipped
 }

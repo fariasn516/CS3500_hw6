@@ -278,6 +278,9 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public Color getCardOwnerColor(Card card) {
+    if (!started) {
+      throw new IllegalStateException("Game not started!");
+    }
     if (redPlayer.getOwnedCardsOnGrid().contains(card)) {
       return Color.RED;
     } else if (bluePlayer.getOwnedCardsOnGrid().contains(card)) {
@@ -298,6 +301,9 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public Player getOwnerAtCell(int row, int col) {
+    if (!started) {
+      throw new IllegalStateException("Game not started!");
+    }
     Card card = grid.getCard(row, col);
     if (card == null) {
       throw new IllegalArgumentException("This cell is a hole or there is no card placed.");
@@ -313,6 +319,9 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public boolean isLegalToPlay(int row, int col) {
+    if (!started) {
+      throw new IllegalStateException("Game not started!");
+    }
     if (row < 0 || row >= grid.getNumRows() || col < 0 || col >= grid.getNumCols()) {
       return false;
     }
@@ -322,6 +331,9 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public int howManyWillFlip(Card card, int row, int col) {
+    if (!started) {
+      throw new IllegalStateException("Game not started!");
+    }
     if (grid.getCells()[row][col].isHole()) {
       throw new IllegalArgumentException("This cell is a hole; no cards can be played here.");
     }
@@ -351,6 +363,9 @@ public class ThreeTriosModel implements Model {
 
   @Override
   public int currentScore(Player player) {
+    if (!started) {
+      throw new IllegalStateException("Game not started!");
+    }
     return player.getCardsInHand().size() + player.getOwnedCardsOnGrid().size();
   }
 
